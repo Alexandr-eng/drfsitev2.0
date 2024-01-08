@@ -3,6 +3,7 @@ from django.db import models
 
 # Create your models here.
 class ApiUser(models.Model):
+
     name = models.CharField(max_length=250)
     email = models.EmailField()
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, null=True)
