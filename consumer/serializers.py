@@ -2,7 +2,24 @@ from rest_framework import serializers, validators
 
 from consumer.models import ApiUser, Category, Warhouse, Product
 
-
+# class ApiUserSerializer(serializers.ModelSerializer):
+    # class Meta:
+    #     model = ApiUser
+    #     fields = ['name', 'email', 'cat']
+    #     extra_kwargs = {"password": {"write_only": True}, "id": {"read_only": True}}
+    #     password = serializers.CharField(min_length=6, max_length=20,write_only=True)
+    #
+    #
+    # def create(self, validated_data):
+    #     user = ApiUser.objects.create(
+    #         email=validated_data["email"],
+    #         username=validated_data["name"],
+    #         cat=validated_data['cat'],
+    #     )
+    #
+    #     user.set_password(validated_data["password"])
+    #     user.save(update_fields=["password"])
+    #     return user
 class ApiUserSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=128, validators=[
         validators.UniqueValidator(ApiUser.objects.all())
@@ -12,6 +29,10 @@ class ApiUserSerializer(serializers.Serializer):
     ])
     password = serializers.CharField(min_length=6, max_length=20,
                                      write_only=True)
+
+    
+
+
 
     def update(self, instance, validated_data):
         if email := validated_data.get("email"):
@@ -52,5 +73,5 @@ class WarhouseSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = "all"
+        fields = "__all__"
         extra_kwargs = {"id": {"read_only": True}}
